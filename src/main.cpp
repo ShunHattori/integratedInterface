@@ -24,8 +24,5 @@ void setup()
 
 void loop()
 {
-    pinMode(22, INPUT);
-    robot_flags.sw_state_phase2 = digitalRead(22);
-    Serial.println(digitalRead(22));
     obasan_1_gouki.work();
 }
