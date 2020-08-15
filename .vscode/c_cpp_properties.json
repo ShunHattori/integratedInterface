@@ -1,0 +1,59 @@
+{
+    "configurations": [
+        {
+            "name": "!!! WARNING !!! AUTO-GENERATED FILE, PLEASE DO NOT MODIFY IT AND USE https://docs.platformio.org/page/projectconf/section_env_build.html#build-flags"
+        },
+        {
+            "name": "Win32",
+            "includePath": [
+                "g:/マイドライブ/RobotClub/00-working_folder/2020-Cteam/Code/Base-Framework/integratedInterface/include",
+                "g:/マイドライブ/RobotClub/00-working_folder/2020-Cteam/Code/Base-Framework/integratedInterface/src",
+                "C:/Users/kirar/.platformio/lib/Servo_ID883/src",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/cores/arduino",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/variants/mega",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                "C:/Users/kirar/.platformio/packages/tool-unity",
+                ""
+            ],
+            "browse": {
+                "limitSymbolsToIncludedHeaders": true,
+                "path": [
+                    "g:/マイドライブ/RobotClub/00-working_folder/2020-Cteam/Code/Base-Framework/integratedInterface/include",
+                    "g:/マイドライブ/RobotClub/00-working_folder/2020-Cteam/Code/Base-Framework/integratedInterface/src",
+                    "C:/Users/kirar/.platformio/lib/Servo_ID883/src",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/cores/arduino",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/variants/mega",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/EEPROM/src",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/HID/src",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/SPI/src",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/SoftwareSerial/src",
+                    "C:/Users/kirar/.platformio/packages/framework-arduino-avr/libraries/Wire/src",
+                    "C:/Users/kirar/.platformio/packages/tool-unity",
+                    ""
+                ]
+            },
+            "defines": [
+                "PLATFORMIO=40400",
+                "ARDUINO_AVR_MEGA2560",
+                "F_CPU=16000000L",
+                "ARDUINO_ARCH_AVR",
+                "ARDUINO=10808",
+                "__AVR_ATmega2560__",
+                ""
+            ],
+            "intelliSenseMode": "clang-x64",
+            "cStandard": "c11",
+            "cppStandard": "c++11",
+            "compilerPath": "C:/Users/kirar/.platformio/packages/toolchain-atmelavr/bin/avr-gcc.exe",
+            "compilerArgs": [
+                "-mmcu=atmega2560",
+                ""
+            ]
+        }
+    ],
+    "version": 4
+}
