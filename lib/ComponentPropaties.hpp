@@ -1,6 +1,11 @@
 #pragma once
 #include "Arduino.h"
 
+//robot_IDは1~の数字
+//遠隔のどのビットを見るか、コントローラ信号での識別番号となる
+
+constexpr uint8_t robot_ID = 1;
+
 struct MotorPropaties
 {
     uint8_t cw_pin;
@@ -60,8 +65,8 @@ struct EmergencyPropaties
 {
     IM920Propaties IM920;
     uint8_t current_sensor_pin,
-        emergency_signal_pin,
-        own_signal_bit;
+        emergency_signal_pin;
+    uint16_t own_signal_bit;
     int RSSIBottomLimit; //遠隔非常停止の通信強度の下限値
 };
 constexpr EmergencyPropaties
@@ -69,7 +74,7 @@ constexpr EmergencyPropaties
         {{'6', 'D', 'E', '4'}, Serial1, 19600, 40, 41},
         35,
         36,
-        0b00000001,
+        uint16_t(uint16_t(0b00000001) << (robot_ID - 1)),
         145,
 };
 

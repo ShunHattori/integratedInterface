@@ -2,7 +2,8 @@
 
 struct FlagSet
 {
-    bool sw_state_phase1,
+    bool is_controller_targeted,
+        sw_state_phase1,
         sw_state_phase2,
         sw_state_phase3,
         sw_state_phase4,

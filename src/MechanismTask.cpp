@@ -34,7 +34,7 @@ void MechanismTask::work()
                       pot_acc_error = 10;
     static uint8_t sequence_num = 0;
 
-    if (flag_set.sw_state_phase1) //stop switch
+    if (flag_set.sw_state_phase1 || !flag_set.is_controller_targeted) //stop switch
     {
         apply_motor_stop();
         return;
