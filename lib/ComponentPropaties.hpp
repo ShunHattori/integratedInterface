@@ -81,9 +81,10 @@ constexpr EmergencyPropaties
 struct NeopixelPropaties
 {
     uint8_t pin;
+    uint8_t num_pixels;
 };
-constexpr NeopixelPropaties NEOPIXEL1_PROPS = {4};
-constexpr NeopixelPropaties NEOPIXEL2_PROPS = {13};
+constexpr NeopixelPropaties NEOPIXEL1_PROPS = {4, 50};
+constexpr NeopixelPropaties NEOPIXEL2_PROPS = {13, 50};
 
 struct AnalogInPropaties
 {
