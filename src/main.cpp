@@ -10,6 +10,7 @@
 #include "../lib/MotorDriver.hpp"
 #include "../lib/ServoDriver.hpp"
 #include "../lib/pinInitializer.hpp"
+#include "../lib/Adafruit_NeoPixel.h"
 
 FlagSet robot_flags;
 MechanismTask robot_mechanism(robot_flags);
@@ -25,4 +26,5 @@ void setup()
 void loop()
 {
     obasan_1_gouki.work();
+    Robot::debugPrint();
 }
