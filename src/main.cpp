@@ -11,11 +11,13 @@
 #include "../lib/ServoDriver.hpp"
 #include "../lib/pinInitializer.hpp"
 #include "../lib/Adafruit_NeoPixel.h"
+#include "../lib/ST7032.h"
 
 FlagSet robot_flags;
 MechanismTask robot_mechanism(robot_flags);
 RemoteEmergency robot_emergency(robot_flags);
 Robot obasan_1_gouki(robot_mechanism, robot_emergency);
+ST7032 LCD;
 
 void setup()
 {

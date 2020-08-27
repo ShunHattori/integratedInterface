@@ -33,6 +33,12 @@ void MechanismTask::work()
     if (waitMs(2000))
     {
         current_sequence++;
+        LCD.clear();
+        LCD.setCursor(0, 0);
+        LCD.print("Running...");
+        LCD.setCursor(0, 1);
+        LCD.print("seq = ");
+        LCD.print(current_sequence);
     }
     switch (current_sequence)
     {

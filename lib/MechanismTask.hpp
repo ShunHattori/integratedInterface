@@ -6,6 +6,7 @@
 #include "../lib/AntiChattering.hpp"
 #include "../lib/AnalogIn.hpp"
 #include "../lib/Adafruit_NeoPixel.h"
+#include "../lib/ST7032.h"
 
 class MechanismTask
 {
@@ -42,6 +43,9 @@ inline MechanismTask::MechanismTask(FlagSet &flag_set_)
 {
     strip1.begin();
     strip2.begin();
+    // LCD表示領域設定(8桁, 2行)
+    LCD.begin(8, 2);
+    LCD.setContrast(30);
 };
 
 inline void MechanismTask::apply_motor_stop()
