@@ -7,11 +7,11 @@
 
 /*
  * IM920 Data Frame:
- * 00,0002,9C:10,23,1
- * Node ID, UniqueID, RSSI Value: SWdigit4 SWdigit3, SWdigit2 SWdigit1 , machineNum
+ * 00,0002,9C:10,23,10
+ * Node ID, UniqueID, RSSI Value: SWdigit4 SWdigit3, SWdigit2 SWdigit1 , machineNum fakebyte
  * indexCouter counts index from the front of UniqueID as 0
- * index : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14
- * datas : 0 0 0 0 , 9 C : 1 0  ,  2  3  ,  1
+ * index : 0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15
+ * datas : 0 0 0 0 , 9 C : 1 0  ,  2  3  ,  1 0
 */
 
 class RemoteEmergency
@@ -22,7 +22,7 @@ private:
 
     struct IM920CommPropaties
     {
-        const int dataFrameLenght = 15, //通信データフレームの長さ(bytes)
+        const int dataFrameLenght = 16, //通信データフレームの長さ(bytes)
             uniqueIDIndex = 0,          //データフレーム内固有IDのインデックス(NodeIDは無視)
             RSSIIndex = 5,              //データフレーム内RSSI値のインデックス
             switchDataIndex = 8,        //データフレーム内接点情報のインデックス
@@ -38,6 +38,7 @@ private:
         bool ownContactState;
     } emergency_data;
 
+    void clearBuffer();
     uint8_t readDatas();
     uint8_t parseDatas();
     uint8_t applyContactState();
@@ -74,6 +75,7 @@ inline uint8_t RemoteEmergency::work()
         return error::auth_failed;
     if (applyContactState())
         return error::auth_failed;
+    clearBuffer();
     return error::none;
 }
 
@@ -82,7 +84,7 @@ inline uint8_t RemoteEmergency::readDatas()
     if (isDataAvailable())
         return error::not_ready;
 
-    uint8_t raw_data[IM920_comm_props.dataFrameLenght], index_num = 0;
+    uint8_t raw_data[64], index_num = 0;
     for (index_num = 0; index_num < 4; index_num++)
     {
         if (!waitDataArrival())
@@ -100,7 +102,9 @@ inline uint8_t RemoteEmergency::readDatas()
     for (int i = 0; i < IM920_comm_props.dataFrameLenght; i++)
     {
         comm_data[i] = raw_data[i];
+        //  Serial.print((char)raw_data[i]);
     }
+    //  Serial.println();
     return error::none;
 }
 
@@ -113,13 +117,14 @@ inline uint8_t RemoteEmergency::parseDatas()
     sw_state_digit[2] = (comm_data[IM920_comm_props.switchDataIndex + 3] - IM920_comm_props.ASCIITableNumberOffset);
     sw_state_digit[3] = (comm_data[IM920_comm_props.switchDataIndex + 4] - IM920_comm_props.ASCIITableNumberOffset);
 
+    emergency_data.allContactState = 0;
     for (uint8_t i = 0; i < 4; i++)
     {
-        emergency_data.allContactState += sw_state_digit[i] * power(10, i);
+        emergency_data.allContactState += sw_state_digit[3 - i] * power(10, i);
     }
     emergency_data.ownContactState = (emergency_data.allContactState & EMERGENCY_PROPS.own_signal_bit) != 0 ? true : false;
 
-    if (robot_ID == comm_data[IM920_comm_props.targetMachineIndex])
+    if (robot_ID == comm_data[IM920_comm_props.targetMachineIndex] - IM920_comm_props.ASCIITableNumberOffset)
     {
         flag_set.is_controller_targeted = true;
         flag_set.sw_state_phase1 = ((emergency_data.allContactState & 0b0000001000000000) != 0) ? true : false;
@@ -131,6 +136,28 @@ inline uint8_t RemoteEmergency::parseDatas()
     {
         flag_set.is_controller_targeted = false;
     }
+    Serial.print(flag_set.is_controller_targeted);
+    Serial.print(',');
+    Serial.print(emergency_data.allContactState);
+    Serial.print('\t');
+    Serial.print(emergency_data.ownContactState);
+    Serial.print(',');
+    Serial.print(flag_set.sw_state_phase1);
+    Serial.print(',');
+    Serial.print(flag_set.sw_state_phase2);
+    Serial.print(',');
+    Serial.print(flag_set.sw_state_phase3);
+    Serial.print(',');
+    Serial.print(flag_set.sw_state_phase4);
+    Serial.print('\t');
+    Serial.print(sw_state_digit[0]);
+    Serial.print(',');
+    Serial.print(sw_state_digit[1]);
+    Serial.print(',');
+    Serial.print(sw_state_digit[2]);
+    Serial.print(',');
+    Serial.print(sw_state_digit[3]);
+    Serial.println();
 
     char RSSI[2]{
         (char)comm_data[IM920_comm_props.RSSIIndex],
@@ -163,6 +190,14 @@ inline bool RemoteEmergency::waitDataArrival()
             return error::timeout;
         if (isDataAvailable())
             return error::none;
+    }
+}
+
+inline void RemoteEmergency::clearBuffer()
+{
+    while (EMERGENCY_PROPS.IM920.port.available())
+    {
+        EMERGENCY_PROPS.IM920.port.read();
     }
 }
 
