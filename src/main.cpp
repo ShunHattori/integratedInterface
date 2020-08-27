@@ -26,5 +26,5 @@ void setup()
 void loop()
 {
     obasan_1_gouki.work();
-    Robot::debugPrint();
+    //Robot::debugPrint();
 }

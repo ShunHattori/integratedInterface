@@ -26,8 +26,10 @@ AnalogIn analog_in2(ANALOGIN2_PROPS);
 
 void MechanismTask::work()
 {
+    updateSwitchInputs();
+    apply_pwms();
     /*****TEST CODE HERE*****/
-    static uint8_t current_sequence = 0, test_pwm = 50;
+    static uint8_t current_sequence = 0, test_pwm = 240;
     if (waitMs(2000))
     {
         current_sequence++;
@@ -39,16 +41,16 @@ void MechanismTask::work()
         motor2.set_pwm(test_pwm);
         motor3.set_pwm(test_pwm);
         motor4.set_pwm(test_pwm);
-        showPixels(strip1, strip1.Color(0xFF, 0xFF, 0xFF));
-        showPixels(strip2, strip2.Color(0xFF, 0xFF, 0xFF));
+        //showPixels(strip1, strip1.Color(0xFF, 0xFF, 0xFF));
+        //showPixels(strip2, strip2.Color(0xFF, 0xFF, 0xFF));
         break;
     case 2:
         motor1.set_pwm(-test_pwm);
         motor2.set_pwm(-test_pwm);
         motor3.set_pwm(-test_pwm);
         motor4.set_pwm(-test_pwm);
-        showPixels(strip1, strip1.Color(0x00, 0xFF, 0xFF));
-        showPixels(strip2, strip2.Color(0x00, 0xFF, 0xFF));
+        //showPixels(strip1, strip1.Color(0x00, 0xFF, 0xFF));
+        //showPixels(strip2, strip2.Color(0x00, 0xFF, 0xFF));
         break;
     case 3:
         apply_motor_stop();
@@ -56,23 +58,23 @@ void MechanismTask::work()
         servo2.setAngle(180);
         servo3.setAngle(180);
         servo4.setAngle(180);
-        showPixels(strip1, strip1.Color(0xFF, 0x00, 0xFF));
-        showPixels(strip2, strip2.Color(0xFF, 0x00, 0xFF));
+        //showPixels(strip1, strip1.Color(0xFF, 0x00, 0xFF));
+        //showPixels(strip2, strip2.Color(0xFF, 0x00, 0xFF));
         break;
     case 4:
         servo1.setAngle(0);
         servo2.setAngle(0);
         servo3.setAngle(0);
         servo4.setAngle(0);
-        showPixels(strip1, strip1.Color(0xFF, 0xFF, 0x00));
-        showPixels(strip2, strip2.Color(0xFF, 0xFF, 0x00));
+        //showPixels(strip1, strip1.Color(0xFF, 0xFF, 0x00));
+        //showPixels(strip2, strip2.Color(0xFF, 0xFF, 0x00));
         break;
     default:
         apply_motor_stop();
-        strip1.clear();
-        strip2.clear();
-        strip1.show();
-        strip2.show();
+        // strip1.clear();
+        // strip2.clear();
+        // strip1.show();
+        // strip2.show();
         servo1.setAngle(0);
         servo2.setAngle(0);
         servo3.setAngle(0);
