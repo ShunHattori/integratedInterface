@@ -25,6 +25,7 @@ private:
 
     bool waitMs(uint16_t);
     void showPixels(Adafruit_NeoPixel &, uint32_t);
+    void updateSwitchInputs();
 
 public:
     MechanismTask() = delete;
@@ -45,18 +46,20 @@ inline MechanismTask::MechanismTask(FlagSet &flag_set_)
 
 inline void MechanismTask::apply_motor_stop()
 {
-    for (auto &&driver_target : MotorSet)
-    {
-        driver_target.set_pwm(0);
-        driver_target.apply_pwm();
-    }
+    motor1.set_pwm(0);
+    motor2.set_pwm(0);
+    motor3.set_pwm(0);
+    motor4.set_pwm(0);
+    this->apply_pwms();
     return;
 }
 
 inline void MechanismTask::apply_pwms()
 {
-    for (auto &&driver_target : MotorSet)
-        driver_target.apply_pwm();
+    motor1.apply_pwm();
+    motor2.apply_pwm();
+    motor3.apply_pwm();
+    motor4.apply_pwm();
     return;
 }
 
@@ -86,4 +89,20 @@ inline void MechanismTask::showPixels(Adafruit_NeoPixel &strip, uint32_t color)
         strip.setPixelColor(i, color);
         strip.show();
     }
+}
+
+inline void MechanismTask::updateSwitchInputs()
+{
+    switch_i1.update();
+    switch_i2.update();
+    switch_i3.update();
+    switch_i4.update();
+    switch_i5.update();
+    switch_i6.update();
+    switch_m1.update();
+    switch_m2.update();
+    switch_m3.update();
+    switch_m4.update();
+    switch_m5.update();
+    switch_m6.update();
 }
