@@ -14,8 +14,8 @@ struct MotorPropaties
 };
 constexpr MotorPropaties MOTOR1_PROPS = {2, 3, 64};
 constexpr MotorPropaties MOTOR2_PROPS = {5, 6, 64};
-constexpr MotorPropaties MOTOR3_PROPS = {46, 7, 64};
-constexpr MotorPropaties MOTOR4_PROPS = {8, 10, 64};
+constexpr MotorPropaties MOTOR3_PROPS = {46, 8, 64};
+constexpr MotorPropaties MOTOR4_PROPS = {9, 10, 64};
 
 struct ServoPropaties
 {
@@ -46,10 +46,10 @@ constexpr SwitchPropaties SWITCH_MACH3_PROPS = {false, false, 24};
 constexpr SwitchPropaties SWITCH_MACH4_PROPS = {false, false, 25};
 constexpr SwitchPropaties SWITCH_MACH5_PROPS = {false, false, 26};
 constexpr SwitchPropaties SWITCH_MACH6_PROPS = {false, false, 27};
-constexpr SwitchPropaties SWITCH_ITFC1_PROPS = {false, false, 28};
-constexpr SwitchPropaties SWITCH_ITFC2_PROPS = {false, false, 29};
-constexpr SwitchPropaties SWITCH_ITFC3_PROPS = {false, false, 30};
-constexpr SwitchPropaties SWITCH_ITFC4_PROPS = {false, false, 31};
+constexpr SwitchPropaties SWITCH_ITFC1_PROPS = {false, true, 28};
+constexpr SwitchPropaties SWITCH_ITFC2_PROPS = {false, true, 29};
+constexpr SwitchPropaties SWITCH_ITFC3_PROPS = {false, true, 30};
+constexpr SwitchPropaties SWITCH_ITFC4_PROPS = {false, true, 31};
 constexpr SwitchPropaties SWITCH_ITFC5_PROPS = {false, false, 32};
 constexpr SwitchPropaties SWITCH_ITFC6_PROPS = {false, false, 33};
 
@@ -71,7 +71,7 @@ struct EmergencyPropaties
 };
 constexpr EmergencyPropaties
     EMERGENCY_PROPS = {
-        {{'6', 'D', 'E', '4'}, Serial1, 19600, 40, 41},
+        {{'6', 'D', 'E', '4'}, Serial3, 19600, 40, 41},
         35,
         36,
         uint16_t(uint16_t(0b00000001) << (robot_ID - 1)),
