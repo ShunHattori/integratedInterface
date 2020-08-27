@@ -2,6 +2,7 @@
 
 #include "Arduino.h"
 #include "../lib/ComponentPropaties.hpp"
+#include "../lib/PWMFrequency.hpp"
 
 class MotorDriver
 {
@@ -18,7 +19,11 @@ public:
     void apply_pwm();
 };
 
-inline MotorDriver::MotorDriver(MotorPropaties motor_props_) : motor_props(motor_props_){};
+inline MotorDriver::MotorDriver(MotorPropaties motor_props_) : motor_props(motor_props_)
+{
+    setPwmFrequencyMEGA2560(motor_props.cw_pin, 1);
+    setPwmFrequencyMEGA2560(motor_props.ccw_pin, 1);
+};
 
 inline void MotorDriver::set_pwm(int16_t _pwm)
 {
