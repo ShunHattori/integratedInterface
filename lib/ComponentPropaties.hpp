@@ -12,20 +12,20 @@ struct MotorPropaties
     uint8_t ccw_pin;
     int16_t max_pwm;
 };
-constexpr MotorPropaties MOTOR1_PROPS = {2, 3, 64};
-constexpr MotorPropaties MOTOR2_PROPS = {5, 6, 64};
-constexpr MotorPropaties MOTOR3_PROPS = {46, 8, 64};
-constexpr MotorPropaties MOTOR4_PROPS = {9, 10, 64};
+constexpr MotorPropaties MOTOR1_PROPS = {2, 3, 250};
+constexpr MotorPropaties MOTOR2_PROPS = {5, 6, 250};
+constexpr MotorPropaties MOTOR3_PROPS = {46, 8, 250};
+constexpr MotorPropaties MOTOR4_PROPS = {9, 10, 250};
 
 struct ServoPropaties
 {
     int16_t pwm_width_min, pwm_width_max;
     uint8_t pin;
 };
-constexpr ServoPropaties SERVO1_PROPS = {500, 2500, 11};
-constexpr ServoPropaties SERVO2_PROPS = {500, 2500, 12};
-constexpr ServoPropaties SERVO3_PROPS = {500, 2500, 44};
-constexpr ServoPropaties SERVO4_PROPS = {500, 2500, 45};
+constexpr ServoPropaties SERVO1_PROPS = {0, 2400, 11};
+constexpr ServoPropaties SERVO2_PROPS = {0, 2400, 12};
+constexpr ServoPropaties SERVO3_PROPS = {0, 2400, 44};
+constexpr ServoPropaties SERVO4_PROPS = {0, 2400, 45};
 
 struct SwitchPropaties
 {

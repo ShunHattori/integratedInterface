@@ -6,14 +6,15 @@
 #include "../lib/AntiChattering.hpp"
 #include "../lib/AnalogIn.hpp"
 #include "../lib/Adafruit_NeoPixel.h"
-#include "../lib/ST7032.h"
+#include "../lib/AQM0802.h"
+#include "../lib/Observer.hpp"
 
 class MechanismTask
 {
 private:
     FlagSet &flag_set;
-    MotorDriver MotorSet[4] = {motor1, motor2, motor3, motor4};
     Adafruit_NeoPixel strip1, strip2;
+    Observer<bool> obs1, obs2, obs3, obs4, obs5, obs6, obs7;
     void work1();
     void work2();
     void work3();
@@ -43,9 +44,6 @@ inline MechanismTask::MechanismTask(FlagSet &flag_set_)
 {
     strip1.begin();
     strip2.begin();
-    // LCD表示領域設定(8桁, 2行)
-    LCD.begin(8, 2);
-    LCD.setContrast(30);
 };
 
 inline void MechanismTask::apply_motor_stop()

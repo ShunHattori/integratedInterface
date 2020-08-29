@@ -11,17 +11,16 @@
 #include "../lib/ServoDriver.hpp"
 #include "../lib/pinInitializer.hpp"
 #include "../lib/Adafruit_NeoPixel.h"
-#include "../lib/ST7032.h"
+#include "../lib/AQM0802.h"
 
 FlagSet robot_flags;
 MechanismTask robot_mechanism(robot_flags);
 RemoteEmergency robot_emergency(robot_flags);
 Robot obasan_1_gouki(robot_mechanism, robot_emergency);
-ST7032 LCD;
+AQM0802 LCD;
 
 void setup()
 {
-    Serial.begin(256000);
     obasan_1_gouki.initialize();
 }
 

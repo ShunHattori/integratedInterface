@@ -32,6 +32,21 @@ inline uint8_t Robot::work()
 inline void Robot::initialize()
 {
     pin_initialize();
+    Serial.begin(256000);
+    Serial.println("boot");
+    LCD.init(30);
+    LCD.clear();
+    LCD.setContrast(30);
+    LCD.setCursor(0, 0);
+    LCD.print("[");
+    LCD.setCursor(7, 0);
+    LCD.print("]");
+    LCD.setCursor(0, 1);
+    LCD.print("SEQ->0");
+    servo1.init();
+    servo2.init();
+    servo3.init();
+    servo4.init();
     return;
 }
 
