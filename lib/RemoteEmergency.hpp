@@ -70,11 +70,17 @@ inline RemoteEmergency::RemoteEmergency(FlagSet &flag_set_) : flag_set(flag_set_
 inline uint8_t RemoteEmergency::work()
 {
     if (readDatas())
+    {
         return error::auth_failed;
+    }
     if (parseDatas())
+    {
         return error::auth_failed;
+    }
     if (applyContactState())
+    {
         return error::auth_failed;
+    }
     clearBuffer();
     return error::none;
 }
@@ -136,28 +142,28 @@ inline uint8_t RemoteEmergency::parseDatas()
     {
         flag_set.is_controller_targeted = false;
     }
-    Serial.print(flag_set.is_controller_targeted);
-    Serial.print(',');
-    Serial.print(emergency_data.allContactState);
-    Serial.print('\t');
-    Serial.print(emergency_data.ownContactState);
-    Serial.print(',');
-    Serial.print(flag_set.sw_state_phase1);
-    Serial.print(',');
-    Serial.print(flag_set.sw_state_phase2);
-    Serial.print(',');
-    Serial.print(flag_set.sw_state_phase3);
-    Serial.print(',');
-    Serial.print(flag_set.sw_state_phase4);
-    Serial.print('\t');
-    Serial.print(sw_state_digit[0]);
-    Serial.print(',');
-    Serial.print(sw_state_digit[1]);
-    Serial.print(',');
-    Serial.print(sw_state_digit[2]);
-    Serial.print(',');
-    Serial.print(sw_state_digit[3]);
-    Serial.println();
+    // Serial.print(flag_set.is_controller_targeted);
+    // Serial.print(',');
+    // Serial.print(emergency_data.allContactState);
+    // Serial.print('\t');
+    // Serial.print(emergency_data.ownContactState);
+    // Serial.print(',');
+    // Serial.print(flag_set.sw_state_phase1);
+    // Serial.print(',');
+    // Serial.print(flag_set.sw_state_phase2);
+    // Serial.print(',');
+    // Serial.print(flag_set.sw_state_phase3);
+    // Serial.print(',');
+    // Serial.print(flag_set.sw_state_phase4);
+    // Serial.print('\t');
+    // Serial.print(sw_state_digit[0]);
+    // Serial.print(',');
+    // Serial.print(sw_state_digit[1]);
+    // Serial.print(',');
+    // Serial.print(sw_state_digit[2]);
+    // Serial.print(',');
+    // Serial.print(sw_state_digit[3]);
+    // Serial.println();
 
     char RSSI[2]{
         (char)comm_data[IM920_comm_props.RSSIIndex],

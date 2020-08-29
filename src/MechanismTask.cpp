@@ -28,68 +28,96 @@ void MechanismTask::work()
 {
     updateSwitchInputs();
     apply_pwms();
-    /*****TEST CODE HERE*****/
-    static uint8_t current_sequence = 0, test_pwm = 240;
-    if (waitMs(2000))
-    {
-        current_sequence++;
-        LCD.clear();
-        LCD.setCursor(0, 0);
-        LCD.print("Running...");
-        LCD.setCursor(0, 1);
-        LCD.print("seq = ");
-        LCD.print(current_sequence);
-    }
-    switch (current_sequence)
-    {
-    case 1:
-        motor1.set_pwm(test_pwm);
-        motor2.set_pwm(test_pwm);
-        motor3.set_pwm(test_pwm);
-        motor4.set_pwm(test_pwm);
-        //showPixels(strip1, strip1.Color(0xFF, 0xFF, 0xFF));
-        //showPixels(strip2, strip2.Color(0xFF, 0xFF, 0xFF));
-        break;
-    case 2:
-        motor1.set_pwm(-test_pwm);
-        motor2.set_pwm(-test_pwm);
-        motor3.set_pwm(-test_pwm);
-        motor4.set_pwm(-test_pwm);
-        //showPixels(strip1, strip1.Color(0x00, 0xFF, 0xFF));
-        //showPixels(strip2, strip2.Color(0x00, 0xFF, 0xFF));
-        break;
-    case 3:
-        apply_motor_stop();
-        servo1.setAngle(180);
-        servo2.setAngle(180);
-        servo3.setAngle(180);
-        servo4.setAngle(180);
-        //showPixels(strip1, strip1.Color(0xFF, 0x00, 0xFF));
-        //showPixels(strip2, strip2.Color(0xFF, 0x00, 0xFF));
-        break;
-    case 4:
-        servo1.setAngle(0);
-        servo2.setAngle(0);
-        servo3.setAngle(0);
-        servo4.setAngle(0);
-        //showPixels(strip1, strip1.Color(0xFF, 0xFF, 0x00));
-        //showPixels(strip2, strip2.Color(0xFF, 0xFF, 0x00));
-        break;
-    default:
-        apply_motor_stop();
-        // strip1.clear();
-        // strip2.clear();
-        // strip1.show();
-        // strip2.show();
-        servo1.setAngle(0);
-        servo2.setAngle(0);
-        servo3.setAngle(0);
-        servo4.setAngle(0);
-        break;
-    }
+    static uint8_t sequence_num = 0;
 
-    return;
-    /************************/
+    /*****TEST CODE HERE*****/
+    static uint8_t test_pwm = 240;
+    static unsigned long prevmicros = 0;
+    Serial.println(long(micros() - prevmicros));
+    prevmicros = micros();
+    if (obs1.isChanged(sequence_num) ||
+        obs2.isChanged(flag_set.is_controller_targeted) ||
+        obs3.isChanged(flag_set.sw_state_emergency) ||
+        obs4.isChanged(flag_set.sw_state_phase1) ||
+        obs5.isChanged(flag_set.sw_state_phase2) ||
+        obs6.isChanged(flag_set.sw_state_phase3) ||
+        obs7.isChanged(flag_set.sw_state_phase4) ||
+        waitMs(2000))
+    {
+        //Serial.println("Updated");
+        LCD.setCursor(5, 1);
+        LCD.print(sequence_num);
+        LCD.setCursor(1, 0);
+        LCD.print(flag_set.is_controller_targeted);
+        LCD.print(flag_set.sw_state_emergency);
+        LCD.print(flag_set.sw_state_phase1);
+        LCD.print(flag_set.sw_state_phase2);
+        LCD.print(flag_set.sw_state_phase3);
+        LCD.print(flag_set.sw_state_phase4);
+    }
+    // switch (current_sequence)
+    // {
+    // case 0:
+    //     // motor1.set_pwm(test_pwm);
+    //     // motor2.set_pwm(test_pwm);
+    //     // motor3.set_pwm(test_pwm);
+    //     // motor4.set_pwm(test_pwm);
+    //     servo1.setAngle(180);
+    //     servo2.setAngle(180);
+    //     servo3.setAngle(180);
+    //     servo4.setAngle(180);
+    //     //showPixels(strip1, strip1.Color(0xFF, 0xFF, 0xFF));
+    //     //showPixels(strip2, strip2.Color(0xFF, 0xFF, 0xFF));
+    //     break;
+    // case 1:
+    //     // motor1.set_pwm(-test_pwm);
+    //     // motor2.set_pwm(-test_pwm);
+    //     // motor3.set_pwm(-test_pwm);
+    //     // motor4.set_pwm(-test_pwm);
+    //     servo1.setAngle(90);
+    //     servo2.setAngle(90);
+    //     servo3.setAngle(90);
+    //     servo4.setAngle(90);
+    //     //showPixels(strip1, strip1.Color(0x00, 0xFF, 0xFF));
+    //     //showPixels(strip2, strip2.Color(0x00, 0xFF, 0xFF));
+    //     break;
+    // case 2:
+    //     // apply_motor_stop();
+    //     servo1.setAngle(0);
+    //     servo2.setAngle(0);
+    //     servo3.setAngle(0);
+    //     servo4.setAngle(0);
+    //     //showPixels(strip1, strip1.Color(0xFF, 0x00, 0xFF));
+    //     //showPixels(strip2, strip2.Color(0xFF, 0x00, 0xFF));
+    //     break;
+    // case 3:
+    //     //showPixels(strip1, strip1.Color(0xFF, 0xFF, 0x00));
+    //     //showPixels(strip2, strip2.Color(0xFF, 0xFF, 0x00));
+    //     current_sequence = 0;
+    //     break;
+    // default:
+    //     current_sequence = 0;
+    //     // strip1.clear();
+    //     // strip2.clear();
+    //     // strip1.show();
+    //     // strip2.show();
+
+    //     break;
+    // }
+
+    // return;
+    // /************************/
+    // int motor = 250;
+    // if (flag_set.sw_state_phase1)
+    //     motor1.set_pwm(-motor);
+    // else
+    //     motor1.set_pwm(0);
+    // if (flag_set.sw_state_phase2)
+    //     motor2.set_pwm(motor);
+    // else
+    //     motor2.set_pwm(0);
+
+    // return;
 
     /*----TASKS HERE----*/
     constexpr int16_t motor1_pwm = 50,
@@ -97,7 +125,6 @@ void MechanismTask::work()
                       servo1_angle = 90,
                       pot_target = 250,
                       pot_acc_error = 10;
-    static uint8_t sequence_num = 0;
 
     if (flag_set.sw_state_phase1 || !flag_set.is_controller_targeted) //stop switch
     {
