@@ -12,10 +12,10 @@ struct MotorPropaties
     uint8_t ccw_pin;
     int16_t max_pwm;
 };
-constexpr MotorPropaties MOTOR1_PROPS = {2, 3, 250};
-constexpr MotorPropaties MOTOR2_PROPS = {5, 6, 250};
-constexpr MotorPropaties MOTOR3_PROPS = {46, 8, 250};
-constexpr MotorPropaties MOTOR4_PROPS = {9, 10, 250};
+constexpr MotorPropaties MOTOR1_PROPS = {2, 3, 200};
+constexpr MotorPropaties MOTOR2_PROPS = {5, 6, 200};
+constexpr MotorPropaties MOTOR3_PROPS = {46, 8, 200};
+constexpr MotorPropaties MOTOR4_PROPS = {9, 10, 200};
 
 struct ServoPropaties
 {
@@ -83,8 +83,8 @@ struct NeopixelPropaties
     uint8_t pin;
     uint8_t num_pixels;
 };
-constexpr NeopixelPropaties NEOPIXEL1_PROPS = {4, 50};
-constexpr NeopixelPropaties NEOPIXEL2_PROPS = {13, 50};
+constexpr NeopixelPropaties NEOPIXEL1_PROPS = {4, 12};
+constexpr NeopixelPropaties NEOPIXEL2_PROPS = {13, 12};
 
 struct AnalogInPropaties
 {
@@ -93,3 +93,11 @@ struct AnalogInPropaties
 
 constexpr AnalogInPropaties ANALOGIN1_PROPS = {A0};
 constexpr AnalogInPropaties ANALOGIN2_PROPS = {A1};
+
+struct ConvergerPropaties
+{
+    uint8_t max_pwm, min_pwm;
+    float pGain, acc_error;
+};
+
+constexpr ConvergerPropaties CONVERGER1_PROPS = {60, 30, 0.2, 5};

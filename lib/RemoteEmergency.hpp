@@ -59,6 +59,7 @@ public:
     RemoteEmergency(FlagSet &);
     virtual ~RemoteEmergency(){};
 
+    void initialize();
     uint8_t work();
 };
 

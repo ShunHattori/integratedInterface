@@ -32,9 +32,9 @@ void MechanismTask::work()
 
     /*****TEST CODE HERE*****/
     static uint8_t test_pwm = 240;
-    static unsigned long prevmicros = 0;
-    Serial.println(long(micros() - prevmicros));
-    prevmicros = micros();
+    // static unsigned long prevmicros = 0;
+    // Serial.println(long(micros() - prevmicros));
+    // prevmicros = micros();
     if (obs1.isChanged(sequence_num) ||
         obs2.isChanged(flag_set.is_controller_targeted) ||
         obs3.isChanged(flag_set.sw_state_emergency) ||
@@ -42,7 +42,7 @@ void MechanismTask::work()
         obs5.isChanged(flag_set.sw_state_phase2) ||
         obs6.isChanged(flag_set.sw_state_phase3) ||
         obs7.isChanged(flag_set.sw_state_phase4) ||
-        waitMs(2000))
+        waitMs1(2000))
     {
         //Serial.println("Updated");
         LCD.setCursor(5, 1);
@@ -55,6 +55,100 @@ void MechanismTask::work()
         LCD.print(flag_set.sw_state_phase3);
         LCD.print(flag_set.sw_state_phase4);
     }
+    /*----TASKS HERE----*/
+    //ポテンショメーター　正面→980
+    //サーボデフォ 90deg
+    constexpr int16_t motor1_pwm = 100,
+                      servo1_angle = 0,
+                      pot_target = 980 - (1023 / 10.0 * 0.6),
+                      pot_acc_error = 8;
+
+    conv1.update();
+
+    if (flag_set.sw_state_phase1 || !flag_set.is_controller_targeted) //stop switch
+    {
+        Serial.println("motor stop : sw1 or EMR enable");
+        apply_motor_stop();
+        return;
+    }
+
+    switch (sequence_num)
+    {
+    case 0:
+        if (flag_set.sw_state_phase2 && sequence_num == 0)
+        {
+            Serial.print("sequence num->0:switch sig2 came, set motor1 pwm to ");
+            Serial.println(motor1_pwm);
+            motor1.set_pwm(motor1_pwm);
+        }
+
+        if (flag_set.sw_state_phase3)
+        {
+            Serial.println("sequence num->1:switch sig3 came");
+            sequence_num = 2;
+        }
+        break;
+
+    case 2:
+        // run motor2(neck) if CT-signal2 enabled
+        if (switch_m1.getState())
+        {
+            Serial.print("sequence num->3:mecha sig_m1 came, set motor1 pwm to 0");
+            Serial.println(", activate conveger1");
+            motor1.set_pwm(0);
+            conv1.setTarget(pot_target);
+            sequence_num = 3;
+        }
+        break;
+
+    case 3:
+        //stop the motor when pot is 1/4 rotated
+        Serial.print(pot_acc_error);
+        Serial.print('\t');
+        Serial.print(pot_target);
+        Serial.print('\t');
+        Serial.print(analog_in1.getValue());
+        Serial.print('\t');
+        Serial.println(conv1.getPwm());
+
+        conv1.setCurrent(analog_in1.getValue());
+        motor2.set_pwm(conv1.getPwm());
+        if (is_near_by(analog_in1.getValue(), pot_target, pot_acc_error))
+        {
+            motor2.set_pwm(0);
+            sequence_num = 4;
+        }
+        break;
+
+    case 4:
+        //blink eyes LEDs
+        sequence_num = 5;
+        break;
+
+    case 5:
+        // shoot the egg
+        Serial.println("sequence num->5:running servo");
+        servo2.setAngle(servo1_angle);
+        sequence_num = 6;
+        break;
+
+    case 6:
+        //initialize for next launch
+        Serial.println("sequence num->6:initializing..");
+        sequence_num = 7;
+        break;
+    default:
+        break;
+    }
+
+    /*----TASKS HERE----*/
+
+    /*
+     *  processing at the bottom of tasks
+     */
+    apply_emergency_state();
+    apply_pwms();
+
     // switch (current_sequence)
     // {
     // case 0:
@@ -118,81 +212,6 @@ void MechanismTask::work()
     //     motor2.set_pwm(0);
 
     // return;
-
-    /*----TASKS HERE----*/
-    constexpr int16_t motor1_pwm = 50,
-                      motor2_pwm = 50,
-                      servo1_angle = 90,
-                      pot_target = 250,
-                      pot_acc_error = 10;
-
-    if (flag_set.sw_state_phase1 || !flag_set.is_controller_targeted) //stop switch
-    {
-        apply_motor_stop();
-        return;
-    }
-
-    switch (sequence_num)
-    {
-    case 0:
-        if (flag_set.sw_state_phase2)
-        {
-            motor1.set_pwm(motor1_pwm);
-            sequence_num = 1;
-        }
-        break;
-
-    case 1:
-        if (flag_set.sw_state_phase3)
-        {
-            sequence_num = 2;
-        }
-        break;
-
-    case 2:
-        // run motor2(neck) if CT-signal2 enabled
-        if (switch_m1.getState())
-        {
-            motor1.set_pwm(0);
-            motor2.set_pwm(motor2_pwm);
-            sequence_num = 3;
-        }
-        break;
-
-    case 3:
-        //stop the motor when pot is 1/4 rotated
-        if (is_near_by(analog_in1.getValue(), pot_target, pot_acc_error))
-        {
-            motor2.set_pwm(0);
-            sequence_num = 4;
-        }
-        break;
-
-    case 4:
-        //blink eyes LEDs
-        sequence_num = 5;
-        break;
-
-    case 5:
-        // shoot the egg
-        servo1.setAngle(servo1_angle);
-        sequence_num = 6;
-        break;
-
-    case 6:
-        //initialize for next launch
-        break;
-    default:
-        break;
-    }
-
-    /*----TASKS HERE----*/
-
-    /*
-     *  processing at the bottom of tasks
-     */
-    apply_emergency_state();
-    apply_pwms();
 }
 
 void work1()
